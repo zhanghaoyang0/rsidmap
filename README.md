@@ -29,10 +29,10 @@ cd rsidmap
 
 Download latest_release dbsnp with `wget`:
 ```
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnpV155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz -P dbsnpV155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnpV155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz.tbi -P dbsnpV155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnp_v155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz -P dbsnp_v155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnp_v155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz.tbi -P dbsnp_v155/
 ```
 
 Once the above has completed, you can try to add rsid field by specifying: 
