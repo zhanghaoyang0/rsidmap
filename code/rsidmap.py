@@ -1,7 +1,9 @@
 import os
+import time
 import argparse
 import numpy as np
 
+start = time.time()
 ### flags parser
 parser = argparse.ArgumentParser(description='rsidmap')
 parser.add_argument('--build', type=str, default='hg19')
@@ -10,8 +12,8 @@ parser.add_argument('--chr_col', type=str, default='CHR')
 parser.add_argument('--pos_col', type=str, default='POS')
 parser.add_argument('--ref_col', type=str, default='REF')
 parser.add_argument('--alt_col', type=str, default='ALT')
-parser.add_argument('--file_gwas', type=str, default='./test/df_hg19.txt')
-parser.add_argument('--file_out', type=str, default='./test/df_hg19_withrsid.txt')
+parser.add_argument('--file_gwas', type=str, default='./example/df_hg19.txt')
+parser.add_argument('--file_out', type=str, default='./example/df_hg19_withrsid.txt')
 args = parser.parse_args()
 
 build = args.build
@@ -24,9 +26,6 @@ print('build: '+ build)
 print('chr_col: '+ chr_col); print('pos_col: '+ pos_col); print('ref_col: '+ ref_col); print('alt_col: '+ alt_col)
 print('file_gwas: '+ file_gwas); print('file_out: '+ file_out)
 print('exact_map: '+ str(exact_map))
-print('We recommend to use False, i.e., when we found rsid from dbsnp, order of alleles would be neglected. \
-set exact_map as False can increase sample size in cross-trait analysis. \
-Because you can reorder two alleles by taking opposite effect in most analysis.')
 
 ### dicts and functions
 def find_rsid(items, chr, pos, ref, alt, exact_map):
@@ -51,7 +50,7 @@ d38 = {"1": "NC_000001.11", "2": "NC_000002.12", "3": "NC_000003.12", "4": "NC_0
     "16": "NC_000016.10", "17": "NC_000017.11", "18": "NC_000018.10", "19": "NC_000019.10", "20": "NC_000020.11",
     "21": "NC_000021.9", "22": "NC_000022.11", "X": "NC_000023.11", "Y": "NC_000024.10", "M": "NC_012920.1"}
 chr2ncid = {'hg19': d19, 'hg38': d38}
-file_dbsnp = {'hg19': './dbsnp/GCF_000001405.25.gz', 'hg38': './dbsnp/GCF_000001405.39.gz'}
+file_dbsnp = {'hg19': './dbsnpV155/GCF_000001405.25.gz', 'hg38': './dbsnpV155/GCF_000001405.39.gz'}
 
 cols = [chr_col, pos_col, ref_col, alt_col]
 res = open(file_out, 'w')
@@ -74,4 +73,7 @@ with open(file_gwas) as f:
         i += 1
 
 res.close()
+
+end = time.time()
 print(f'N. rsid maped: {n_map}, done!')
+print (f'spend {round(end-start, 2)} sec')

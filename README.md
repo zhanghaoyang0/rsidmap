@@ -7,12 +7,13 @@
 `rsidmap` uses latest dbsnp release (build 155, available at 20210616, >20G for a build) to perform quick search with *tabix*.
 
 - Convenient:  
-`rsidmap` can use a (tab separated) gwas summary as input and provide another add gwas summar with a new rsid field as output. 
+`rsidmap` uses a (tab separated) gwas summary as input and provide another add gwas summar with a new rsid field as output. 
 
 - Fleasible:  
 If you use ANNOVAR, it is [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/) (i.e., exact match ref, alt). 
-In most cross-trait analysis we only want to match two alleles (neglecting their orders), because many software can reorder two alleles (by taking opposite GWAS effect). 
-`rsidmap` provide a flag to chose if you want exact match or not.
+`rsidmap` provide a flag `--exact_map` to chose if you want exact match or not, default is False.  
+Because in cross-trait analysis we only want to match two alleles (neglecting their orders), two alleles can be reordered by taking opposite GWAS effect. 
+
 
 # Requirements
 - `Linux` with `wget` and `tabix`
@@ -28,10 +29,10 @@ cd rsidmap
 
 Download latest_release dbsnp with `wget`:
 ```
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz.tbi -P dbsnp/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnpV155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz -P dbsnpV155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnpV155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz.tbi -P dbsnpV155/
 ```
 
 Once the above has completed, you can try to add rsid field by specifying: 
@@ -99,6 +100,7 @@ process 8/2001
 If rsmap finnised, you will see number of snp map to dbsnp:
 ```
 N. rsid maped: 1722, done!
+spend 104.76 sec
 ```
 
 The output file is like:
