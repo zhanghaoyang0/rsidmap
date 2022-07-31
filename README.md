@@ -42,7 +42,7 @@ Once the above has completed, you can try to add rsid field by specifying:
 Two examples (hg19 and hg38):
 
 ```
-python ./code/rsid.py \
+python ./code/rsidmap.py \
 --build hg19 \
 --chr_col CHR \
 --pos_col POS \
@@ -51,7 +51,7 @@ python ./code/rsid.py \
 --file_in ./test/df_hg19.txt \
 --file_out ./test/df_hg19_withrsid.txt
 
-python ./code/rsid.py \
+python ./code/rsidmap.py \
 --build hg38 \
 --chr_col chrom \
 --pos_col pos \
