@@ -15,8 +15,8 @@ In most cross-trait analysis we only want to match two alleles (neglecting their
 `rsidmap` provide a flag to chose if you want exact match or not.
 
 # Requirements
-- Linux
-- python3 (my version is 3.9.6) with numpy (my version is 1.23.1) and argparse (my version is 1.1)
+- `Linux` with `wget` and `tabix`
+- `Python3` (my version is 3.9.6) with `numpy` (my version is 1.23.1) and `argparse` (my version is 1.1)
 
 
 ## Getting Started
