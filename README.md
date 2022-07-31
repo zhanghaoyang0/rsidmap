@@ -42,7 +42,7 @@ Once the above has completed, you can try to add rsid field by specifying:
 `--ref_col` field name of REF, default is REF  
 `--alt_col` field name of ALT, default is ALT  
 `--exact_map` excat map or not, default is False  
-`--file_in` tab[\t] separated input file  
+`--file_gwas` tab[\t] separated input file  
 `--file_out` output file  
 
 Two examples (hg19 and hg38):
