@@ -4,16 +4,17 @@
 
 # Why rsidmap
 - Full:  
-`rsidmap` uses latest dbsnp release (build 155, available at 20210616, >20G for a build) to perform quick search with *tabix*.
+`rsidmap` uses latest dbsnp release (build 155, available at 20210616, >20G for a build) to perform quick search with 
+*tabix*.
 
 - Convenient:  
-`rsidmap` uses a (tab separated) gwas summary as input and provide another add gwas summar with a new rsid field as output. 
+`rsidmap` uses a (tab separated) gwas summary as input and provide output with a new rsid field. 
 
 - Fleasible:  
-If you use ANNOVAR, it is [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/) (i.e., exact match ref, alt). 
+If you use ANNOVAR, it is [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/) (i.e., exact match 
+ref, alt). 
 `rsidmap` provide a flag `--exact_map` to chose if you want exact match or not, default is False.  
-Because in cross-trait analysis we only want to match two alleles (neglecting their orders), two alleles can be reordered by taking opposite GWAS effect. 
-
+In cross-trait analysis, two alleles can be reordered by taking opposite GWAS effect, so we can only match two alleles (neglecting their orders).
 
 # Requirements
 - `Linux` with `wget` and `tabix`
@@ -89,7 +90,9 @@ alt_col: A1
 file_gwas: ./example/df_hg19.txt
 file_out: ./example/df_hg19_withrsid.txt
 exact_map: False
-We recommend to use False, i.e., when we found rsid from dbsnp, order of alleles would be neglected. set exact_map as False can increase sample size in cross-trait analysis. Because you can reorder two alleles by taking opposite effect in most analysis.
+We recommend to use False, i.e., when we found rsid from dbsnp, order of alleles would be neglected. set exact_map as False 
+can increase sample size in cross-trait analysis. Because you can reorder two alleles by taking opposite effect in most 
+analysis.
 process 2/2001
 process 4/2001
 process 6/2001
