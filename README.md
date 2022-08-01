@@ -21,7 +21,7 @@ In cross-trait analysis, two alleles can be reordered by taking opposite GWAS ef
 - `Python3` (my version is 3.9.6) with `numpy` (my version is 1.23.1) and `argparse` (my version is 1.1)
 
 
-## Getting Started
+# Getting Started
 Clone this repository via the commands:
 ```  
 git clone https://github.com/zhanghaoyang0/rsidmap.git
@@ -118,8 +118,8 @@ CHR     POS     A1      A2      FRQ     BETA    SE      P       SNP
 ```
 Note that pseudo ids (CHR:POS:REF:ALT) would be added if not matched, see list line above.
 
-## Acknowledgement
+# Acknowledgement
 Thank Dr. Guowang Lin for his inspiration.
 
-## Feedback and comments
+# Feedback and comments
 Feel free to add a issue or contact me via zhanghaoyang0@hotmail.com
