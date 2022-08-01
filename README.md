@@ -13,10 +13,13 @@
 - Fleasible:  
 `rsidmap` provides a flag `--exact_map` to chose if you want exact match or not, default is False.  
 Example:  
-exact_map = True: only 1:10055:T:C would be mapped to rs892501864. 
+exact_map = True: only 1:10055:T:C would be mapped to rs892501864.  
 exact_map = False:, both 1:10055:T:C and 1:10055:C:T would be mapped to rs892501864.   
+
 Tools like ANNOVAR provides only [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/).  
+
 A fleasible map (exact_map = False) is useful because in some analysis when two alleles can be reordered by taking opposite GWAS effect.  
+
 Note that indel would be exact map. 
 Example:  
 1:10055:C:CT would be mapped to rs1639543798
