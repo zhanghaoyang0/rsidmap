@@ -21,6 +21,16 @@ chr_col = args.chr_col; pos_col = args.pos_col; ref_col = args.ref_col; alt_col 
 file_gwas = args.file_gwas; file_out = args.file_out
 exact_map = args.exact_map
 
+# # default setting, for test
+# build = 'hg19'
+# chr_col = 'CHR'
+# pos_col = 'POS'
+# ref_col = 'A2'
+# alt_col = 'A1'
+# file_gwas = './example/df_hg19.txt'
+# file_out = './example/df_hg19_withrsid.txt'
+# exact_map = False
+
 print('Setting:')
 print('build: '+ build)
 print('chr_col: '+ chr_col); print('pos_col: '+ pos_col); print('ref_col: '+ ref_col); print('alt_col: '+ alt_col)
@@ -29,16 +39,20 @@ print('exact_map: '+ str(exact_map))
 
 ### dicts and functions
 def find_rsid(items, chr, pos, ref, alt, exact_map):
+    # indel must exact_map (i.e., C>CT != CT>C)
+    exact_map1 = True if (len(alt)>1)|(len(ref)>1) else exact_map 
     snp = f'{chr}:{pos}:{ref}:{alt}' # pseudo snp
-    if len(items)==0: 
-        return(snp)
+    if len(items)==0: return(snp)
     else: 
         items = [x.split()[2:5] for x in items] # select useful fields
-        # break multi allele (e.g., A,G>T), make all ref, alt combination (e.g., A>G and C>T)
-        items = [[[z[0], x, y] for x in z[1].split(',') for y in z[2].split(',')] for z in items][0] 
-        flags = [[x[1], x[2]]==[ref, alt] if exact_map else {x[1], x[2]}=={ref, alt} for x in items]
-        if sum(flags)>0: snp = np.array(items)[flags][0][0] # greedy map, use first
+        # break multi allele (e.g., A,G>T to A>G and C>T)
+        items1 = [] # alt combination
+        for item in items:
+            items1 += [[item[0], x, y] for x in item[1].split(',') for y in item[2].split(',')]
+        flags = [[x[1], x[2]]==[ref, alt] if exact_map1 else {x[1], x[2]}=={ref, alt} for x in items1]
+        if sum(flags)>0: snp = np.array(items1)[flags][0][0] # greedy map, use first
         return(snp)
+
 d19 = {"1": "NC_000001.10", "2": "NC_000002.11", "3": "NC_000003.11", "4": "NC_000004.11","5": "NC_000005.9", 
     "6": "NC_000006.11", "7": "NC_000007.13", "8": "NC_000008.10","9": "NC_000009.11", "10": "NC_000010.10", 
     "11": "NC_000011.9", "12": "NC_000012.11","13": "NC_000013.10", "14": "NC_000014.8", "15": "NC_000015.9",
@@ -56,9 +70,11 @@ cols = [chr_col, pos_col, ref_col, alt_col]
 res = open(file_out, 'w')
 nrow = len(list(open(file_gwas)))
 i = 1; n_map = 0
+
+
 with open(file_gwas) as f:
     for line in f:
-        if i % round(nrow/1000)==0: print(f'process {i}/{nrow}')
+        if i % round(nrow/50)==0: print(f'processed {i}/{nrow} snp ({round(100*i/nrow, 1)}%)')
         if i == 1: # header row
             idx = [line.split().index(x) for x in cols] # idx for chr, pos, a1, a2
             out = line.replace('\n', '\tSNP\n')

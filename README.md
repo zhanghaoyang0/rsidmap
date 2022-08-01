@@ -11,10 +11,16 @@
 `rsidmap` uses a (tab separated) gwas summary as input and provides output with a new rsid field. 
 
 - Fleasible:  
-If you use ANNOVAR, it is [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/) (i.e., exact match 
-ref, alt). 
 `rsidmap` provides a flag `--exact_map` to chose if you want exact match or not, default is False.  
-In cross-trait analysis, two alleles can be reordered by taking opposite GWAS effect, so we can only match two alleles (neglecting their orders).
+Example:  
+exact_map = True: only 1:10055:T:C would be mapped to rs892501864. 
+exact_map = False:, both 1:10055:T:C and 1:10055:C:T would be mapped to rs892501864.   
+Tools like ANNOVAR provides only [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/).  
+A fleasible map (exact_map = False) is useful because in some analysis when two alleles can be reordered by taking opposite GWAS effect.  
+Note that indel would be exact map. 
+Example:  
+1:10055:C:CT would be mapped to rs1639543798
+1:10055:CT:C would be mapped to rs1639543820
 
 # Requirements
 - `Linux` with `wget` and `tabix`
@@ -71,6 +77,10 @@ python ./code/rsidmap.py \
 The input file is like:
 ```
 CHR     POS     A1      A2      FRQ     BETA    SE      P
+1   10054   C   CT  0.2313  0.002   0.23    0.3121
+1   10054   CT  C   0.1213  0.042   0.12    0.0031
+1   10054   T   A   0.165   0.011    0.63   0.0259
+1   10054   T   C   0.151   0.023    0.02   0.0121
 2       48543917        A       G       0.4673  0.0045  0.0088  0.6101
 5       87461867        A       G       0.7151  0.0166  0.0096  0.08397
 14      98165673        T       C       0.1222  -0.0325 0.014   0.02035
@@ -90,33 +100,49 @@ alt_col: A1
 file_gwas: ./example/df_hg19.txt
 file_out: ./example/df_hg19_withrsid.txt
 exact_map: False
-We recommend to use False, i.e., when we found rsid from dbsnp, order of alleles would be neglected. set exact_map as False 
-can increase sample size in cross-trait analysis. Because you can reorder two alleles by taking opposite effect in most 
-analysis.
-process 2/2001
-process 4/2001
-process 6/2001
-process 8/2001
+processed 10/501 snp (2.0%)
+processed 20/501 snp (4.0%)
+processed 30/501 snp (6.0%)
+processed 40/501 snp (8.0%)
+processed 50/501 snp (10.0%)
 ...
 ```
 
 If rsmap finnised, you will see number of snp map to dbsnp:
 ```
-N. rsid maped: 1722, done!
-spend 104.76 sec
+processed 480/501 snp (95.8%)
+processed 490/501 snp (97.8%)
+processed 500/501 snp (99.8%)
+N. rsid maped: 500, done!
+spend 27.02 sec
 ```
 
 The output file is like:
 ```
 CHR     POS     A1      A2      FRQ     BETA    SE      P       SNP
+1   10054   C   CT  0.2313  0.002   0.23    0.3121      rs1639543820
+1   10054   CT  C   0.1213  0.042   0.12    0.0031      rs1639543798
+1   10054   T   A   0.165   0.011    0.63   0.0259      rs892501864
+1   10054   T   C   0.151   0.023    0.02   0.0121      rs892501864
 2       48543917        A       G       0.4673  0.0045  0.0088  0.6101  rs13387171
 5       87461867        A       G       0.7151  0.0166  0.0096  0.08397 rs13175391
 14      98165673        T       C       0.1222  -0.0325 0.014   0.02035 rs58796836
 12      104289454       T       C       0.534   0.0085  0.0088  0.3322  rs9888379
 11      26254654        T       C       0.0765  0.0338  0.0167  0.04256 rs182678857
-4       163471758       T       C       0.612   0.0119  0.0094  0.2057  4:163471758:C:T
+4       163471758       T       C       0.612   0.0119  0.0094  0.2057  rs10019229
 ```
-Note that pseudo ids (CHR:POS:REF:ALT) would be added if not matched, see list line above.
+Note that pseudo ids (CHR:POS:REF:ALT) would be added if not matched.
+You can check with `grep -v "rs" ./example/df_hg38_withrsid.txt`
+```
+chrom   pos     ref     alt     SNP
+3       133449405       C       CTTTGTT 3:133449405:C:CTTTGTT
+4       38201325        TG      T       4:38201325:TG:T
+7       101169297       AAC     A       7:101169297:AAC:A
+22      19836880        T       TA      22:19836880:T:TA
+7       105265861       A       AT      7:105265861:A:AT
+4       83064334        TA      T       4:83064334:TA:T
+12      132410689       G       A       12:132410689:G:A
+```
 
 # Acknowledgement
 Thank Dr. Guowang Lin for his inspiration.
