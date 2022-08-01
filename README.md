@@ -24,7 +24,7 @@ Example:
 
 # Requirements
 - `Linux` with `wget` and `tabix`
-- `Python3` (my version is 3.9.6) with `numpy` (my version is 1.23.1) and `argparse` (my version is 1.1)
+- `Python3` (my version is 3.9.6) with `numpy` (my version is 1.23.1), `argparse`, `gzip`, `os`, `time`
 
 
 # Getting Started
@@ -49,7 +49,7 @@ Once the above has completed, you can try to add rsid field by specifying:
 `--ref_col` field name of REF, default is REF  
 `--alt_col` field name of ALT, default is ALT  
 `--exact_map` excat map or not, default is False  
-`--file_gwas` tab[\t] separated input file  
+`--file_gwas` tab[\t] separated input file, gzip (file_gwas end with '.gz') input can also be recongized  
 `--file_out` output file  
 
 Two examples (hg19 and hg38):
@@ -57,21 +57,24 @@ Two examples (hg19 and hg38):
 ```
 python ./code/rsidmap.py \
 --build hg19 \
---chr_col CHR \
---pos_col POS \
---ref_col A2 \
---alt_col A1 \
+--chr_col CHR --pos_col POS --ref_col A2 --alt_col A1 \
 --file_gwas ./example/df_hg19.txt \
 --file_out ./example/df_hg19_withrsid.txt
 
 python ./code/rsidmap.py \
 --build hg38 \
---chr_col chrom \
---pos_col pos \
---ref_col ref \
---alt_col alt \
+--chr_col chrom --pos_col pos --ref_col ref --alt_col alt \
 --file_gwas ./example/df_hg38.txt \
 --file_out ./example/df_hg38_withrsid.txt
+```
+
+gzip (file_gwas end with '.gz') input can be recongized: 
+```
+python ./code/rsidmap.py \
+--build hg19 \
+--chr_col CHR --pos_col POS --ref_col A2 --alt_col A1 \
+--file_gwas ./example/df_hg19.txt.gz \
+--file_out ./example/df_hg19_withrsid.txt
 ```
 
 The input file is like:

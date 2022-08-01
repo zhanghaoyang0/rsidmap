@@ -1,4 +1,5 @@
 import os
+import gzip
 import time
 import argparse
 import numpy as np
@@ -27,7 +28,7 @@ exact_map = args.exact_map
 # pos_col = 'POS'
 # ref_col = 'A2'
 # alt_col = 'A1'
-# file_gwas = './example/df_hg19.txt'
+# file_gwas = './example/df_hg19.txt.gz'
 # file_out = './example/df_hg19_withrsid.txt'
 # exact_map = False
 
@@ -53,6 +54,10 @@ def find_rsid(items, chr, pos, ref, alt, exact_map):
         if sum(flags)>0: snp = np.array(items1)[flags][0][0] # greedy map, use first
         return(snp)
 
+def openfile(filename):
+    if filename.endswith('.gz'): return gzip.open(filename, 'rt') 
+    else: return open(filename)
+
 d19 = {"1": "NC_000001.10", "2": "NC_000002.11", "3": "NC_000003.11", "4": "NC_000004.11","5": "NC_000005.9", 
     "6": "NC_000006.11", "7": "NC_000007.13", "8": "NC_000008.10","9": "NC_000009.11", "10": "NC_000010.10", 
     "11": "NC_000011.9", "12": "NC_000012.11","13": "NC_000013.10", "14": "NC_000014.8", "15": "NC_000015.9",
@@ -67,12 +72,13 @@ chr2ncid = {'hg19': d19, 'hg38': d38}
 file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/GCF_000001405.39.gz'}
 
 cols = [chr_col, pos_col, ref_col, alt_col]
+if ('.gz' in file_gwas): f = gzip.open(file_gwas, 'rt')
+else: f = open(file_gwas)
 res = open(file_out, 'w')
-nrow = len(list(open(file_gwas)))
-i = 1; n_map = 0
 
+nrow = len(list(openfile(file_gwas))); i = 1; n_map = 0
 
-with open(file_gwas) as f:
+with openfile(file_gwas) as f:
     for line in f:
         if i % round(nrow/50)==0: print(f'processed {i}/{nrow} snp ({round(100*i/nrow, 1)}%)')
         if i == 1: # header row
@@ -88,6 +94,7 @@ with open(file_gwas) as f:
         _ = res.write(out) # use a variable to aviod printing
         i += 1
 
+f.close()
 res.close()
 
 end = time.time()
