@@ -19,7 +19,7 @@ Tools like ANNOVAR provides only [excat map](https://annovar.openbioinformatics.
 A fleasible map (exact_map = False) is useful because in some analysis when two alleles can be reordered by taking opposite GWAS effect.  
 Note that indel would be exact map. 
 Example:  
-1:10055:C:CT would be mapped to rs1639543798
+1:10055:C:CT would be mapped to rs1639543798  
 1:10055:CT:C would be mapped to rs1639543820
 
 # Requirements
