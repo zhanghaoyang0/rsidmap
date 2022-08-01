@@ -24,8 +24,9 @@ Example:
 
 # Requirements
 - `Linux` with `wget` and `tabix`
-- `Python3` (my version is 3.9.6) with `numpy` (my version is 1.23.1), `argparse`, `gzip`, `os`, `time`
-
+- `Python3` (3.9.6) with `numpy` (1.23.1), `argparse`, `gzip`, `os`, `time`  
+  
+Versions I used are in bracket
 
 # Getting Started
 Clone this repository via the commands:

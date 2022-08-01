@@ -7,10 +7,9 @@ rm -rf dbsnp_v155; mkdir dbsnp_v155; touch dbsnp_v155/test # make empty fold
 
 
 ### check module version
-from signal import CTRL_BREAK_EVENT
 from importlib_metadata import version
-print(version('numpy'))
-print(version('argparse '))
+print(version('argparse'))
+print(version('argparse'))
 
 ### add some snp to test 
 # hg 19
