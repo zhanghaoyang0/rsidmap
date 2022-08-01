@@ -89,7 +89,7 @@ CHR     POS     A1      A2      FRQ     BETA    SE      P
 4       163471758       T       C       0.612   0.0119  0.0094  0.2057
 ```
 
-If rsmap is running, you will see:
+If `rsidmap` is running, you will see:
 ```
 Setting:
 build: hg19
@@ -108,7 +108,7 @@ processed 50/501 snp (10.0%)
 ...
 ```
 
-If rsmap finnised, you will see number of snp map to dbsnp:
+If `rsidmap` finnised, you will see number of snp map to dbsnp:
 ```
 processed 480/501 snp (95.8%)
 processed 490/501 snp (97.8%)
