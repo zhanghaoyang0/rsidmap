@@ -8,12 +8,12 @@
 *tabix*.
 
 - Convenient:  
-`rsidmap` uses a (tab separated) gwas summary as input and provide output with a new rsid field. 
+`rsidmap` uses a (tab separated) gwas summary as input and provides output with a new rsid field. 
 
 - Fleasible:  
 If you use ANNOVAR, it is [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/) (i.e., exact match 
 ref, alt). 
-`rsidmap` provide a flag `--exact_map` to chose if you want exact match or not, default is False.  
+`rsidmap` provides a flag `--exact_map` to chose if you want exact match or not, default is False.  
 In cross-trait analysis, two alleles can be reordered by taking opposite GWAS effect, so we can only match two alleles (neglecting their orders).
 
 # Requirements
