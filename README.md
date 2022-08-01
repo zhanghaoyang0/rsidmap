@@ -131,7 +131,7 @@ CHR     POS     A1      A2      FRQ     BETA    SE      P       SNP
 11      26254654        T       C       0.0765  0.0338  0.0167  0.04256 rs182678857
 4       163471758       T       C       0.612   0.0119  0.0094  0.2057  rs10019229
 ```
-Note that pseudo ids (CHR:POS:REF:ALT) would be added if not matched.
+Note that pseudo ids (CHR:POS:REF:ALT) would be added if not matched.  
 You can check with `grep -v "rs" ./example/df_hg38_withrsid.txt`
 ```
 chrom   pos     ref     alt     SNP
