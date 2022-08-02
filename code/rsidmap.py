@@ -73,7 +73,7 @@ file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/
 
 cols = [chr_col, pos_col, ref_col, alt_col]
 res = open(file_out, 'w')
-nrow = len(list(openfile(file_gwas))); i = 1; n_map = 0
+nrow = len(list(openfile(file_gwas)))-1; i = 1; n_map = 0
 
 with openfile(file_gwas) as f:
     for line in f:
@@ -94,5 +94,5 @@ with openfile(file_gwas) as f:
 res.close()
 
 end = time.time()
-print(f'N. rsid maped: {n_map}, done!')
+print(f'N. rsid mapped: {n_map}, done!')
 print (f'spend {round(end-start, 2)} sec')

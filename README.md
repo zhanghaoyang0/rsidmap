@@ -99,13 +99,13 @@ alt_col: A1
 file_gwas: ./example/df_hg19.txt
 file_out: ./example/df_hg19_rsidmap.txt
 exact_map: False
-processed 10/501 snp (2.0%)
-processed 20/501 snp (4.0%)
-processed 30/501 snp (6.0%)
+processed 10/500 snp (2.0%)
+processed 20/500 snp (4.0%)
+processed 30/500 snp (6.0%)
 ... 
-processed 480/501 snp (95.8%)
-processed 490/501 snp (97.8%)
-processed 500/501 snp (99.8%)
+processed 480/500 snp (95.8%)
+processed 490/500 snp (97.8%)
+processed 500/500 snp (99.8%)
 N. rsid maped: 498, done!
 spend 27.02 sec
 ```
@@ -160,18 +160,18 @@ file_gwas: ./example/largedf_hg19.txt.gz
 file_out: ./example/largedf_hg19_rsidmapv2.txt
 exact_map: False
 making dnsnp dict ...
-processed 2000/1000001 snp (0.2%)
-processed 4000/1000001 snp (0.4%)
+processed 2000/1000000 snp (0.2%)
+processed 4000/1000000 snp (0.4%)
 ...
-processed 960000/1000001 snp (96.0%)
-processed 980000/1000001 snp (98.0%)
-processed 1000000/1000001 snp (100.0%)
+processed 960000/1000000 snp (96.0%)
+processed 980000/1000000 snp (98.0%)
+processed 1000000/1000000 snp (100.0%)
 N. rsid maped: 999593, done!
 spend 27 min 57 sec
 ```
 
 # Acknowledgement
-Many thanks to Dr. Guowang Lin for his inspiration.
+Many thanks to Dr. Guowang Lin for his inspiration and help!
 
 # Feedback and comments
 Feel free to add a issue or contact me via zhanghaoyang0@hotmail.com

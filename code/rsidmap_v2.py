@@ -81,7 +81,7 @@ with openfile(file_gwas) as f:
 
 
 # dbsnp_key value
-nrow = len(list(openfile(file_gwas)))
+nrow = len(list(openfile(file_gwas)))-1
 dbsnp = dict()
 with gzip.open(file_dbsnp[build], 'rt') as f: 
     for line in f:
@@ -116,5 +116,5 @@ with openfile(file_gwas) as f:
 res.close()
 
 end = time.time()
-print(f'N. rsid maped: {n_map}, done!')
+print(f'N. rsid mapped: {n_map}, done!')
 print (f'spend {time.strftime("%M min %S sec", time.gmtime(start-end))}')
