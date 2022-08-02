@@ -14,7 +14,7 @@ parser.add_argument('--pos_col', type=str, default='POS')
 parser.add_argument('--ref_col', type=str, default='REF')
 parser.add_argument('--alt_col', type=str, default='ALT')
 parser.add_argument('--file_gwas', type=str, default='./example/df_hg19.txt')
-parser.add_argument('--file_out', type=str, default='./example/df_hg19_withrsid.txt')
+parser.add_argument('--file_out', type=str, default='./example/df_hg19_rsidmapv2.txt')
 args = parser.parse_args()
 
 build = args.build
@@ -42,6 +42,9 @@ def find_rsid(items, chr, pos, ref, alt, exact_map):
     if sum(flags)>0: snp = np.array(items1)[flags][0][0] # greedy map, use first
     return(snp)
 
+def openfile(filename):
+    if filename.endswith('.gz'): return gzip.open(filename, 'rt') 
+    else: return open(filename)
 
 # these two dicts are reversed from that in rsidmap
 d19 = {'NC_000001.10': '1', 'NC_000002.11': '2', 'NC_000003.11': '3', 'NC_000004.11': '4', 'NC_000005.9': '5', 'NC_000006.11': '6', 
@@ -57,49 +60,45 @@ ncid2chr = {'hg19': d19, 'hg38': d38}
 file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/GCF_000001405.39.gz'}
 
 
-# default setting, for test
-build = 'hg19'
-chr_col = 'CHR'
-pos_col = 'POS'
-ref_col = 'A2'
-alt_col = 'A1'
-file_gwas = './example/df_hg19.txt'
-file_out = './example/df_hg19_withrsid.txt'
-exact_map = False
+# # default setting, for test
+# build = 'hg19'
+# chr_col = 'CHR'
+# pos_col = 'POS'
+# ref_col = 'A2'
+# alt_col = 'A1'
+# file_gwas = './example/df_hg19.txt'
+# file_out = './example/df_hg19_rsidmapv2.txt'
+# exact_map = False
 
 ### make dbsnp dict
 print (f'making dnsnp dict ...')
-time1 = time.time()
-# dnsnp_key
-line = open(file_gwas).readline()
+# dbsnp_key
+line = openfile(file_gwas).readline()
 idx = [line.split().index(x) for x in [chr_col, pos_col, ref_col, alt_col]] # idx for chr, pos, ref, alt
-with open(file_gwas) as f:
-    dnsnp_key = {tuple([i[x] for x in idx[:2]]) for i in (line.split() for line in f)}
 
-# dnsnp_key value
+with openfile(file_gwas) as f:
+    dbsnp_key = {tuple([i[x] for x in idx[:2]]) for i in (line.split() for line in f)}
+
+
+# dbsnp_key value
+nrow = len(list(openfile(file_gwas)))
 dbsnp = dict()
 with gzip.open(file_dbsnp[build], 'rt') as f: 
     for line in f:
         if "#" in line: continue
         items = line.split()
-        token = tuple([ncid2chr[build][items[0]], items[1]])
-        if token in dnsnp_key:
+        if items[0] in ncid2chr[build]: token = tuple([ncid2chr[build][items[0]], items[1]])
+        if token in dbsnp_key:
             if token in dbsnp: dbsnp[token] = dbsnp[token] + [items[2:5]]
             else: dbsnp[token] = [items[2:5]]
-            print(len(dbsnp))
-
-time2 = time.time()
-print (f'spend {time.strftime("%M min %S sec", time.gmtime(time2-time1))}')
-
+            if len(dbsnp) % round(nrow/500)==0: print(f'processed {len(dbsnp)}/{nrow} snp ({round(100*len(dbsnp)/nrow, 1)}%)')
+            
 ### annotate
 print (f'finding dnsnp dict ...')
 res = open(file_out, 'w')
-nrow = len(list(open(file_gwas)))
 i = 1; n_map = 0
 
-open_f = gzip.open(file_gwas, 'rt') if '.gz' in file_gwas else open(file_gwas)
-
-with open(file_gwas) as f:
+with openfile(file_gwas) as f:
     for line in f:
         if i % round(nrow/50)==0: print(f'processed {i}/{nrow} snp ({round(100*i/nrow, 1)}%)')
         if i == 1: # header
@@ -116,6 +115,6 @@ with open(file_gwas) as f:
 
 res.close()
 
-time3 = time.time()
+end = time.time()
 print(f'N. rsid maped: {n_map}, done!')
-print (f'spend {time.strftime("%M min %S sec", time.gmtime(time3-time1))}')
+print (f'spend {time.strftime("%M min %S sec", time.gmtime(start-end))}')

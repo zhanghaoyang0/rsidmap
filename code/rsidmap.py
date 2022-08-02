@@ -14,7 +14,7 @@ parser.add_argument('--pos_col', type=str, default='POS')
 parser.add_argument('--ref_col', type=str, default='REF')
 parser.add_argument('--alt_col', type=str, default='ALT')
 parser.add_argument('--file_gwas', type=str, default='./example/df_hg19.txt')
-parser.add_argument('--file_out', type=str, default='./example/df_hg19_withrsid.txt')
+parser.add_argument('--file_out', type=str, default='./example/df_hg19_rsidmap.txt')
 args = parser.parse_args()
 
 build = args.build
@@ -29,7 +29,7 @@ exact_map = args.exact_map
 # ref_col = 'A2'
 # alt_col = 'A1'
 # file_gwas = './example/df_hg19.txt.gz'
-# file_out = './example/df_hg19_withrsid.txt'
+# file_out = './example/df_hg19_rsidmap.txt'
 # exact_map = False
 
 print('Setting:')
@@ -72,10 +72,7 @@ chr2ncid = {'hg19': d19, 'hg38': d38}
 file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/GCF_000001405.39.gz'}
 
 cols = [chr_col, pos_col, ref_col, alt_col]
-if ('.gz' in file_gwas): f = gzip.open(file_gwas, 'rt')
-else: f = open(file_gwas)
 res = open(file_out, 'w')
-
 nrow = len(list(openfile(file_gwas))); i = 1; n_map = 0
 
 with openfile(file_gwas) as f:
@@ -87,14 +84,13 @@ with openfile(file_gwas) as f:
         else:
             chr, pos, ref, alt = [line.split()[x] for x in idx]
             ncid = chr2ncid[build][str(chr)] # chr id in dbsnp
-            items = os.popen(f'tabix {file_dbsnp[build]} {ncid}:{pos}-{int(pos)+1}').readlines()
+            items = os.popen(f'tabix {file_dbsnp[build]} {ncid}:{pos}-{int(pos)}').readlines()
             snp = find_rsid(items, chr, pos, ref, alt, exact_map)
             if 'rs' in snp: n_map += 1
             out = line.replace('\n', '\t'+snp+'\n')
         _ = res.write(out) # use a variable to aviod printing
         i += 1
 
-f.close()
 res.close()
 
 end = time.time()
