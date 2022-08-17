@@ -11,7 +11,6 @@ mv example/test*txt ../test/
 ### check module version
 from importlib_metadata import version
 print(version('argparse'))
-print(version('argparse'))
 
 ### check by line
 # f = gzip.open(XXX, 'rt')
