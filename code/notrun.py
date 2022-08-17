@@ -5,6 +5,8 @@
 rm -rf dbsnp_v155; ln -s ../db/dbsnp_v155 ./dbsnp_v155 # link to in-house dbsnp
 rm -rf dbsnp_v155; mkdir dbsnp_v155; touch dbsnp_v155/test # make empty fold
 
+mv ../test/test*txt example/
+mv example/test*txt ../test/
 
 ### check module version
 from importlib_metadata import version
@@ -16,24 +18,30 @@ print(version('argparse'))
 # f.readline()
 
 ### add some snp to test 
-# hg 19
-$ tabix GCF_000001405.25.gz NC_000001.10:10054-10055
-NC_000001.10    10054   rs1639543798    C       CT      
-NC_000001.10    10054   rs1639543820    CT      C      
-NC_000001.10    10055   rs768019142     TA      T,TAA  
-NC_000001.10    10055   rs892501864     T       A,C    
-# hg38
-$ tabix GCF_000001405.39.gz NC_000001.11:10054-10055
-NC_000001.11    10054   rs1639543798    C       CT     
-NC_000001.11    10054   rs1639543820    CT      C       
-NC_000001.11    10055   rs768019142     TA      T,TAA  
-NC_000001.11    10055   rs892501864     T       A,C     
-# add this to test file
-1   10054   C   CT  0.2313  0.002   0.23    0.3121
-1   10054   CT  C   0.1213  0.042   0.12    0.0031
-1   10054   T   A   0.165   0.011    0.63   0.0259
-1   10054   T   C   0.151   0.023    0.02   0.0121
+# # hg 19
+# $ tabix GCF_000001405.25.gz NC_000001.10:10054-10055
+# NC_000001.10    10054   rs1639543798    C       CT      
+# NC_000001.10    10054   rs1639543820    CT      C      
+# NC_000001.10    10055   rs768019142     TA      T,TAA  
+# NC_000001.10    10055   rs892501864     T       A,C    
+# # hg38
+# $ tabix GCF_000001405.39.gz NC_000001.11:10054-10055
+# NC_000001.11    10054   rs1639543798    C       CT     
+# NC_000001.11    10054   rs1639543820    CT      C       
+# NC_000001.11    10055   rs768019142     TA      T,TAA  
+# NC_000001.11    10055   rs892501864     T       A,C     
+# # add this to test file
+# 1   10054   C   CT  0.2313  0.002   0.23    0.3121
+# 1   10054   CT  C   0.1213  0.042   0.12    0.0031
+# 1   10054   T   A   0.165   0.011    0.63   0.0259
+# 1   10054   T   C   0.151   0.023    0.02   0.0121
 
+### a test
+# python ./code/rsidmap_v2.py \
+# --build hg38 \
+# --chr_col CHR --pos_col POS --ref_col A2 --alt_col A1 \
+# --file_gwas ./example/test.txt \
+# --file_out ./example/test_out.txt
 
 ### codes from lingw
 # import sys
@@ -51,8 +59,6 @@ NC_000001.11    10055   rs892501864     T       A,C
 # end = time.time()
 # end - start 
 # # 1673.6871206760406
-
-
 
 # with open(bim) as f:
 #     for line in f:

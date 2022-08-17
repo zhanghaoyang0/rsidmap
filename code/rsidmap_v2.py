@@ -46,15 +46,25 @@ def openfile(filename):
     if filename.endswith('.gz'): return gzip.open(filename, 'rt') 
     else: return open(filename)
 
-# these two dicts are reversed from that in rsidmap
-d19 = {'NC_000001.10': '1', 'NC_000002.11': '2', 'NC_000003.11': '3', 'NC_000004.11': '4', 'NC_000005.9': '5', 'NC_000006.11': '6', 
-    'NC_000007.13': '7', 'NC_000008.10': '8', 'NC_000009.11': '9', 'NC_000010.10': '10', 'NC_000011.9': '11', 'NC_000012.11': '12', 
-    'NC_000013.10': '13', 'NC_000014.8': '14', 'NC_000015.9': '15', 'NC_000016.9': '16', 'NC_000017.10': '17', 'NC_000018.9': '18', 
-    'NC_000019.9': '19', 'NC_000020.10': '20', 'NC_000021.8': '21', 'NC_000022.10': '22', 'NC_000023.10': 'X', 'NC_000024.9': 'Y', 'NC_012920.1': 'M'}
-d38 = {'NC_000001.11': '1', 'NC_000002.12': '2', 'NC_000003.12': '3', 'NC_000004.12': '4', 'NC_000005.10': '5', 'NC_000006.12': 
-    '6', 'NC_000007.14': '7', 'NC_000008.11': '8', 'NC_000009.12': '9', 'NC_000010.11': '10', 'NC_000011.10': '11', 'NC_000012.12': 
-    '12', 'NC_000013.11': '13', 'NC_000014.9': '14', 'NC_000015.10': '15', 'NC_000016.10': '16', 'NC_000017.11': '17', 'NC_000018.10': '18', 
-    'NC_000019.10': '19', 'NC_000020.11': '20', 'NC_000021.9': '21', 'NC_000022.11': '22', 'NC_000023.11': 'X', 'NC_000024.10': 'Y', 'NC_012920.1': 'M'}
+def to_int_tuple(tuple_in): # change string in dbsnp_key to int
+    chr = tuple_in[0]
+    pos = tuple_in[1]
+    chr = '23' if chr=='X' else chr
+    chr = '24' if chr=='Y' else chr
+    chr = '25' if chr=='M' else chr
+    try: out = tuple(int(x) for x in (chr, pos))
+    except: out = tuple()
+    return(out)
+
+# these two dicts are reversed from that in rsidmap, X=23, Y=24, M=25
+d19 = {'NC_000001.10': 1, 'NC_000002.11': 2, 'NC_000003.11': 3, 'NC_000004.11': 4, 'NC_000005.9': 5, 'NC_000006.11': 6, 
+    'NC_000007.13': 7, 'NC_000008.10': 8, 'NC_000009.11': 9, 'NC_000010.10': 10, 'NC_000011.9': 11, 'NC_000012.11': 12, 
+    'NC_000013.10': 13, 'NC_000014.8': 14, 'NC_000015.9': 15, 'NC_000016.9': 16, 'NC_000017.10': 17, 'NC_000018.9': 18, 
+    'NC_000019.9': 19, 'NC_000020.10': 20, 'NC_000021.8': 21, 'NC_000022.10': 22, 'NC_000023.10':23, 'NC_000024.9': 24, 'NC_012920.1': 25}
+d38 = {'NC_000001.11': 1, 'NC_000002.12': 2, 'NC_000003.12': 3, 'NC_000004.12': 4, 'NC_000005.10': 5, 'NC_000006.12': 6,
+    'NC_000007.14': 7, 'NC_000008.11': 8, 'NC_000009.12': 9, 'NC_000010.11': 10, 'NC_000011.10': 11, 'NC_000012.12': 12, 
+    'NC_000013.11': 13, 'NC_000014.9': 14, 'NC_000015.10': 15, 'NC_000016.10': 16, 'NC_000017.11': 17, 'NC_000018.10': 18, 
+    'NC_000019.10': 19, 'NC_000020.11': 20, 'NC_000021.9': 21, 'NC_000022.11': 22, 'NC_000023.11': 23, 'NC_000024.10': 24, 'NC_012920.1': 25}
 
 ncid2chr = {'hg19': d19, 'hg38': d38}
 file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/GCF_000001405.39.gz'}
@@ -75,24 +85,36 @@ print (f'making dnsnp dict ...')
 # dbsnp_key
 line = openfile(file_gwas).readline()
 idx = [line.split().index(x) for x in [chr_col, pos_col, ref_col, alt_col]] # idx for chr, pos, ref, alt
-
 with openfile(file_gwas) as f:
     dbsnp_key = {tuple([i[x] for x in idx[:2]]) for i in (line.split() for line in f)}
 
+dbsnp_key = set(tuple(map(to_int_tuple, dbsnp_key))) # string to int
+dbsnp_key.remove(tuple()) # drop string tuple
+chrs = {x[0] for x in dbsnp_key}
+max_pos = dict() # make dict to determine when to stop dbsnp process
+for chr in chrs: max_pos[chr] = max([x[1] for x in dbsnp_key if x[0]==chr])
+
+print (f'{len(dbsnp_key)} unique and valid snp.')
 
 # dbsnp_key value
-nrow = len(list(openfile(file_gwas)))-1
+nsnp = len(dbsnp_key)
 dbsnp = dict()
 with gzip.open(file_dbsnp[build], 'rt') as f: 
     for line in f:
         if "#" in line: continue
         items = line.split()
-        if items[0] in ncid2chr[build]: token = tuple([ncid2chr[build][items[0]], items[1]])
+        if items[0] in ncid2chr[build]: 
+            token = tuple([ncid2chr[build][items[0]], int(items[1])])
+            if token[0]>max(max_pos.keys()): break # break if chr is greater than that in max_pos
         if token in dbsnp_key:
             if token in dbsnp: dbsnp[token] = dbsnp[token] + [items[2:5]]
             else: dbsnp[token] = [items[2:5]]
-            if len(dbsnp) % round(nrow/500)==0: print(f'processed {len(dbsnp)}/{nrow} snp ({round(100*len(dbsnp)/nrow, 1)}%)')
-            
+            if (nsnp<20): print(f'processed {len(dbsnp)}/{nsnp} snp')
+            elif len(dbsnp) % (round(nsnp/20))==0: print(f'processed {len(dbsnp)}/{nsnp} snp ({round(100*len(dbsnp)/nsnp, 1)}%)')
+            if len(dbsnp)==nsnp: break
+
+print (f'done!')
+
 ### annotate
 print (f'finding dnsnp dict ...')
 res = open(file_out, 'w')
@@ -100,12 +122,15 @@ i = 1; n_map = 0
 
 with openfile(file_gwas) as f:
     for line in f:
-        if i % round(nrow/50)==0: print(f'processed {i}/{nrow} snp ({round(100*i/nrow, 1)}%)')
         if i == 1: # header
             out = line.replace('\n', '\tSNP\n')
         else:
             chr, pos, ref, alt = [line.split()[x] for x in idx]
-            if (chr, pos) in dbsnp: items = dbsnp[(chr, pos)]
+            chr = '23' if chr=='X' else chr
+            chr = '24' if chr=='Y' else chr
+            chr = '25' if chr=='M' else chr
+            token = to_int_tuple((chr, pos))
+            if token in dbsnp: items = dbsnp[token]
             else: items = []
             snp = find_rsid(items, chr, pos, ref, alt, exact_map)
             if 'rs' in snp: n_map += 1
@@ -116,5 +141,7 @@ with openfile(file_gwas) as f:
 res.close()
 
 end = time.time()
-print(f'N. rsid mapped: {n_map}, done!')
-print (f'spend {time.strftime("%M min %S sec", time.gmtime(start-end))}')
+print(f'done! N. rsid mapped: {n_map}')
+if n_map>len(dbsnp_key): print(f'your gwas have duplicate snps ...')
+
+print (f'spend {time.strftime("%M min %S sec", time.gmtime(end-start))}')

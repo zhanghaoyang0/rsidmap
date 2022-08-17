@@ -73,11 +73,11 @@ file_dbsnp = {'hg19': './dbsnp_v155/GCF_000001405.25.gz', 'hg38': './dbsnp_v155/
 
 cols = [chr_col, pos_col, ref_col, alt_col]
 res = open(file_out, 'w')
-nrow = len(list(openfile(file_gwas)))-1; i = 1; n_map = 0
+nsnp = len(list(openfile(file_gwas)))-1; i = 1; n_map = 0
 
 with openfile(file_gwas) as f:
     for line in f:
-        if i % round(nrow/50)==0: print(f'processed {i}/{nrow} snp ({round(100*i/nrow, 1)}%)')
+        if i % round(nsnp/20)==0: print(f'processed {i-1}/{nsnp} snp ({round(100*(i-1)/nsnp, 1)}%)')
         if i == 1: # header row
             idx = [line.split().index(x) for x in cols] # idx for chr, pos, a1, a2
             out = line.replace('\n', '\tSNP\n')
@@ -94,5 +94,5 @@ with openfile(file_gwas) as f:
 res.close()
 
 end = time.time()
-print(f'N. rsid mapped: {n_map}, done!')
+print(f'done! N. rsid mapped: {n_map}')
 print (f'spend {round(end-start, 2)} sec')
