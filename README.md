@@ -16,11 +16,7 @@ exact_map = True: only 1:10055:T:C would be mapped to rs892501864.
 exact_map = False:, both 1:10055:T:C and 1:10055:C:T would be mapped to rs892501864.   
 Tools like ANNOVAR provides only [excat map](https://annovar.openbioinformatics.org/en/latest/articles/dbSNP/).  
 A fleasible map (exact_map = False) is useful because in some analysis, two alleles can be reordered by taking opposite GWAS effect.  
-<<<<<<< HEAD
-Note that indel would be exact map (even you have set exact_map = False). 
-=======
-Note that indel would be exact map. 
->>>>>>> 0e64b5982ae213353ff1eeadb3c1268e776c8817
+Note that indel would be exact map (even you have set exact_map = False).  
 Example:  
 1:10055:C:CT would be mapped to rs1639543798  
 1:10055:CT:C would be mapped to rs1639543820
