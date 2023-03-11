@@ -36,11 +36,14 @@ cd rsidmap
 
 Download latest_release dbsnp with `wget`:
 ```
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnp_v155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz -P dbsnp_v155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnp_v155/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.39.gz.tbi -P dbsnp_v155/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnp/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.40.gz -P dbsnp/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnp/
+wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.40.gz.tbi -P dbsnp/
+# If you can not download with prevous link, add an issue.  
+# The possible reason is dbsnp is updated and I need to update my code.
 ```
+
 
 Once the above has completed, you can try to add rsid field by specifying: 
 `--build` hg19 or hg38  

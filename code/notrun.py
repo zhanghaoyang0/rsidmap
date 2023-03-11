@@ -2,7 +2,9 @@
 ### this script is only for me to check something, it will not be used in analysis.
 
 ### add soft link of dbsnpV155
-rm -rf dbsnp_v155; ln -s ../db/dbsnp_v155 ./dbsnp_v155 # link to in-house dbsnp
+rm -rf dbsnp_v155; ln -s ../db/dbsnp_v155 ./dbsnp_v155 # link to in-house dbsnp 
+rm -rf dbsnp_v155; ln -s /home/yanglab_data/pub/dbsnp_v155 # new path
+
 rm -rf dbsnp_v155; mkdir dbsnp_v155; touch dbsnp_v155/test # make empty fold
 
 mv ../test/test*txt example/
