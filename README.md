@@ -33,7 +33,7 @@ Versions I used are in bracket
 # Getting Started
 Clone this repository via the commands:
 ```  
-git clone git://github.com/zhanghaoyang0/rsidmap.git
+git clone https://github.com/zhanghaoyang0/rsidmap.git
 cd rsidmap
 ```
 
