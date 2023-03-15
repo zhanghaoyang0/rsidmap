@@ -30,22 +30,50 @@ Versions I used are in bracket
 # Getting Started
 Clone this repository via the commands:
 ```  
-git clone https://github.com/zhanghaoyang0/rsidmap.git
+git clone git://github.com/zhanghaoyang0/rsidmap.git
 cd rsidmap
 ```
 
-Download latest_release dbsnp with `wget`:
+Download latest_release dbsnp with `wget`, and verify your dbsnp with `md5sum`:
 ```
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.40.gz -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz.tbi -P dbsnp/
-wget -c https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/GCF_000001405.40.gz.tbi -P dbsnp/
+url="https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/"
+dbsnp_hg19="GCF_000001405.25"
+dbsnp_hg38="GCF_000001405.40"
+
+# for hg 19
+wget -c ${url}${dbsnp_hg19}.gz -P dbsnp/
+wget -c ${url}${dbsnp_hg19}.gz.md5 -P dbsnp/
+wget -c ${url}${dbsnp_hg19}.gz.tbi -P dbsnp/
+wget -c ${url}${dbsnp_hg19}.gz.tbi.md5 -P dbsnp/
+
+# for hg38
+wget -c ${url}${dbsnp_hg38}.gz -P dbsnp/
+wget -c ${url}${dbsnp_hg38}.gz.md5 -P dbsnp/
+wget -c ${url}${dbsnp_hg38}.gz.tbi -P dbsnp/
+wget -c ${url}${dbsnp_hg38}.gz.tbi.md5 -P dbsnp/
+
+## note
 # If you can not download with prevous link, add an issue.  
 # The possible reason is dbsnp is updated and I need to update my code.
+
+# check md5sum
+cd dbsnp
+md5sum -c ${dbsnp_hg19}.gz.md5
+md5sum -c ${dbsnp_hg19}.gz.tbi.md5
+md5sum -c ${dbsnp_hg38}.gz.md5
+md5sum -c ${dbsnp_hg38}.gz.tbi.md5
+cd ../
 ```
 
+If your dbsnp is correct, you will see:
+```
+GCF_000001405.25.gz: OK
+GCF_000001405.25.gz.tbi: OK
+GCF_000001405.40.gz: OK
+GCF_000001405.40.gz.tbi: OK 
+```
 
-Once the above has completed, you can try to add rsid field by specifying: 
+Then, you can try to add rsid field by specifying: 
 `--build` hg19 or hg38  
 `--chr_col` field name of CHR, default is CHR   
 `--pos_col` field name of POS, default is POS  
