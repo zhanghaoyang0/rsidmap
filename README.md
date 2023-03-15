@@ -55,10 +55,6 @@ wget -c ${url}${dbsnp_hg38}.gz.md5 -P dbsnp/
 wget -c ${url}${dbsnp_hg38}.gz.tbi -P dbsnp/
 wget -c ${url}${dbsnp_hg38}.gz.tbi.md5 -P dbsnp/
 
-## note
-# If you can not download with prevous link, add an issue.  
-# The possible reason is dbsnp is updated and I need to update my code.
-
 # check md5sum
 cd dbsnp
 md5sum -c ${dbsnp_hg19}.gz.md5
@@ -66,6 +62,10 @@ md5sum -c ${dbsnp_hg19}.gz.tbi.md5
 md5sum -c ${dbsnp_hg38}.gz.md5
 md5sum -c ${dbsnp_hg38}.gz.tbi.md5
 cd ../
+
+## note
+# If you can not download with prevous link, add an issue.  
+# The possible reason is dbsnp is updated and I need to update my code.
 ```
 
 If your dbsnp is correct, you will see:
