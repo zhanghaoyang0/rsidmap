@@ -24,26 +24,25 @@ exact_map = False:, both 1:10055:T:C and 1:10055:C:T would be mapped to rs892501
 1:10055:CT:C would be mapped to rs1639543820
 ```
 
+# rsidmap and rsidmap_v2
+- If your gwas is small, use `rsidmap.py` is enough. It process ~20 snp a sec.  
+- If your gwas is LARGE (e.g., > 1M snp), use `rsidmap_v2.py`.  
+  It takes ~30min to build a python dictionary and then map to your gwas quickly.
+
+
 # Requirements
-- `Linux` with `wget` and `tabix`
+- `Linux`
+- (Optional) `tabix` (use in rsidmap.py [for small data] but not rsidmap_v2.py [for large data])
 - `Python3` (3.9.6) with `numpy` (1.23.1), `argparse`, `gzip`, `os`, `time`  
-  
 Versions I used are in bracket
-
-# Getting Started
-Clone this repository via the commands:
-```  
-git clone https://github.com/zhanghaoyang0/rsidmap.git
-cd rsidmap
-```
-
+- `dbsnp`  
 Download latest_release dbsnp with `wget`, and verify your dbsnp with `md5sum`:
 ```
 url="https://ftp.ncbi.nlm.nih.gov/snp/latest_release/VCF/"
 dbsnp_hg19="GCF_000001405.25"
 dbsnp_hg38="GCF_000001405.40"
 
-# for hg 19
+# for hg19
 wget -c ${url}${dbsnp_hg19}.gz -P dbsnp/
 wget -c ${url}${dbsnp_hg19}.gz.md5 -P dbsnp/
 wget -c ${url}${dbsnp_hg19}.gz.tbi -P dbsnp/
@@ -76,6 +75,20 @@ GCF_000001405.40.gz: OK
 GCF_000001405.40.gz.tbi: OK 
 ```
 
+# Getting Started
+Clone this repository via the commands:
+```  
+git clone https://github.com/zhanghaoyang0/rsidmap.git
+cd rsidmap
+```
+
+If `dbsnp/` is not in your `rsidmap` folder, add a soft link:
+```
+ln -s path_of_your_dbsnp ./
+# check if it link correctly
+ls dbsnp/ # you will see the data
+```
+
 Then, you can try to add rsid field by specifying: 
 `--build` hg19 or hg38  
 `--chr_col` field name of CHR, default is CHR   
@@ -86,6 +99,7 @@ Then, you can try to add rsid field by specifying:
 `--file_gwas` tab[\t] separated input file, gzip (file_gwas end with '.gz') input can also be recongized  
 `--file_out` output file  
 
+# For small dataset (rsidmap) 
 Two examples (hg19 and hg38):
 ```
 python ./code/rsidmap.py \
@@ -165,11 +179,7 @@ CHR     POS     A1      A2      FRQ     BETA    SE      P       SNP
 1       10054   T       C       0.151   0.023   0.02    0.0121  1:10054:C:T
 ```
 
-# For large dataset
-- If your gwas is small, use `rsidmap.py` is enough. It process ~20 snp a sec.  
-- If your gwas is large (e.g., > 1M snp), use `rsidmap_v2.py`.  
-  It takes ~30min to build a python dictionary and then map to your gwas quickly.
-  
+# For large dataset (rsidmap_v2)  
 Examples:
 ```
 python ./code/rsidmap_v2.py \
