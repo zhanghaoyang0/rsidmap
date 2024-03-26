@@ -1,13 +1,6 @@
 ### not run
 ### this script is only for me to check something, it will not be used in analysis.
 
-### add soft link of dbsnp
-rm dbsnp; mkdir dbsnp; touch dbsnp/test  #  empty fold
-ln -s ../../db/dbsnp/ dbsnp # link to in-house dbsnp 
-
-mv ../test/test*txt example/
-mv example/test*txt ../test/
-
 ### check module version
 from importlib_metadata import version
 print(version('argparse'))

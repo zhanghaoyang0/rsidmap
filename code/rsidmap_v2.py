@@ -101,7 +101,7 @@ nsnp = len(dbsnp_key)
 dbsnp = dict()
 with gzip.open(file_dbsnp[build], 'rt') as f: 
     for line in f:
-        if "#" in line: continue
+        if line.startswith('#'): continue
         items = line.split()
         if items[0] in ncid2chr[build]: 
             token = tuple([ncid2chr[build][items[0]], int(items[1])])
